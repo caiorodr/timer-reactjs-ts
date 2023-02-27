@@ -4,7 +4,7 @@ import { CountdownContainer, FormContainer, HomeContainer, Separator } from "./s
 export function Home () {
     return (
         <HomeContainer>
-            <form action="">
+            <form>
                 <FormContainer>
                     <label htmlFor="task">Vou trabalhar em</label>
                     <input id="task" />

@@ -1,5 +1,8 @@
 import { Play } from "phosphor-react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import zod from 'zod'
+
 import { 
     CountdownContainer, 
     FormContainer, 
@@ -13,26 +16,36 @@ import {
 
 // controlled / uncontrolled
 
-
+/* function register(name: string) {
+    return {
+        onChange: () => void,
+        onBlur: () => void,
+        onFocus: () => void,
+        ...
+    }
+}
+*/
 
 export function Home () {
-    const [task, setTask] = useState('');
+    const { register, handleSubmit, watch } = useForm();
 
-    function resetForm() {
-        setTask('');
+    function handleCreateNewCycle(data: any) {
+        console.log(data)
     }
 
+    const task = watch('task');
+    const isSubmitDisabled = !task
+    
     return (
         <HomeContainer>
-            <form>
+            <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
                 <FormContainer>
                     <label htmlFor="task">Vou trabalhar em</label>
                     <TaskInput 
                         id="task"  
                         list="task-suggestions" 
                         placeholder="Dê um nome para o seu projeto"
-                        onChange={(e) => setTask(e.target.value)}
-                        value={task}
+                        {...register('task')}
                     />
                     
                     <datalist id="task-suggestions">
@@ -50,6 +63,7 @@ export function Home () {
                         step={5}
                         min={5}
                         max={60}
+                        {...register('minutesAmaunt', { valueAsNumber: true})}
                     />
 
                     <span>minutos.</span>
@@ -63,7 +77,7 @@ export function Home () {
                     <span>0</span>
                 </CountdownContainer>
 
-                <StartCountdownButton disabled={!task} type="submit">
+                <StartCountdownButton type="submit" disabled={isSubmitDisabled} >
                     <Play size={24}/>
                     Começar
                 </StartCountdownButton>
